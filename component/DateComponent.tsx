@@ -5,18 +5,11 @@ import { DateData } from 'react-native-calendars';
 import { DayProps } from 'react-native-calendars/src/calendar/day';
 import { solar2lunar } from 'solarlunar';
 
-interface DateComponentProps {
-  state: any;
-  dateTime: DateData;
-  onDayPress: (date: DateData) => void;
-  isSelected: boolean;
-}
-
 function DateComponent(props: DayProps & {
-    date?: DateData;
-    current?: DateData;
+  date?: DateData;
+  current?: DateData;
 }) {
-    
+
   const { current, state, dateTime, onPress } = {
     current: props.current,
     state: props.state,
@@ -36,51 +29,59 @@ function DateComponent(props: DayProps & {
   }, [dateTime]);
 
   const _onPress = useCallback(() => {
-          onPress?.(dateTime);
-      }, [onPress, dateTime]);
+    onPress?.(dateTime);
+  }, [onPress, dateTime]);
 
   const isDisabled = useMemo(() => state === 'disabled', [state]);
   console.log("Rendering", dateTime?.dateString);
   const isSelected = useMemo(() => {
-    
-      return dateTime?.dateString === current;
+
+    return dateTime?.dateString === current;
   }, [current, dateTime]);
-  
- 
+
+
   return (
     <Pressable
       onPress={_onPress}
-      style={[styles.dateComponent, isSelected && styles.selectedDate]}
+      style={[styles.wrapper, isSelected && styles.selectedDate]}
     >
-      <Text
-        style={[
-          styles.primaryDate,
-          isToday && styles.primaryToday,
-          isDisabled && styles.disabledDate,
-        ]}
-      >
-        {dateTime?.day}
-      </Text>
-      <Text style={[styles.secondaryDate, isDisabled && styles.disabledDate]}>
-        {shortLunarString}
-      </Text>
+      <View style={styles.content}>
+        <Text
+          style={[
+            styles.primaryDate,
+            isToday && styles.primaryToday,
+            isDisabled && styles.disabledDate,
+          ]}
+        >
+          {dateTime?.day}
+        </Text>
+        <Text style={[styles.secondaryDate, isDisabled && styles.disabledDate]}>
+          {shortLunarString}
+        </Text>
+      </View>
     </Pressable>
   );
 }
 
-function areEqual(prevProps : any, nextProps : any) {
-    const { prevCurrent,  prevDateTime} = {
-        prevCurrent: prevProps.current,
-        prevDateTime: prevProps.date,
-    };
+function areEqual(prevProps: DayProps & {
+  date?: DateData;
+  current?: DateData;
+}, nextProps: DayProps & {
+  date?: DateData;
+  current?: DateData;
+}) {
+  const { prevCurrent, prevDateTime } = {
+    prevCurrent: prevProps.current,
+    prevDateTime: prevProps.date,
+  };
 
-    const { nextCurrent,  nextDateTime} = {
-        nextCurrent: nextProps.current,
-        nextDateTime: nextProps.date,
-    };
+  const { nextCurrent, nextDateTime } = {
+    nextCurrent: nextProps.current,
+    nextDateTime: nextProps.date,
+  };
 
-    const prevSelected = prevCurrent === prevDateTime?.dateString;
-    const nextSelected = nextCurrent === nextDateTime?.dateString;
+  const prevSelected = prevCurrent === prevDateTime?.dateString;
+  const nextSelected = nextCurrent === nextDateTime?.dateString;
 
   return prevDateTime?.dateString === nextDateTime?.dateString && prevSelected === nextSelected;
 }
@@ -88,15 +89,20 @@ function areEqual(prevProps : any, nextProps : any) {
 export default React.memo(DateComponent, areEqual);
 
 const styles = StyleSheet.create({
-  dateComponent: {
+  wrapper: {
     width: (Dimensions.get('window').width - 20) / 7,
     height: Dimensions.get('window').height * 0.6 / 5,
-    alignItems: 'center',
+    padding: 2,
   },
   selectedDate: {
-    borderColor: '#269278',
-    borderWidth: 2,
+    backgroundColor: '#269278',
     borderRadius: 5,
+  },
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#171717',
+    borderRadius: 3,
   },
   disabledDate: {
     color: '#484848',

@@ -5,6 +5,7 @@ import { Feather, MaterialIcons } from '@expo/vector-icons'
 interface CalendarHeaderProps {
     currentMonth: number;
     currentYear: number;
+    onTodayPress: () => void
 }
 
 const CalendarHeader = (props : CalendarHeaderProps) => {
@@ -22,7 +23,7 @@ const CalendarHeader = (props : CalendarHeaderProps) => {
             </View>
             <View style={styles.right}>
                 <Feather name="search" size={30} color="#e3e3e3" />
-                <MaterialIcons name="today" size={30} color="#e3e3e3" />
+                <MaterialIcons name="today" size={30} color="#e3e3e3" onPress={props.onTodayPress} />
             </View>
         </View>
     )

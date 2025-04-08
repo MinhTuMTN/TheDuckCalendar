@@ -25,26 +25,28 @@ const App = () => {
     setCurrentDate(day);
   }, []);
 
-  // // Optimize the component rendering by using React.memo in DateComponent
-  // // and only passing what's necessary
-  // const renderDayComponent = useCallback((date: DayProps & {
-  //   date?: DateData;
-  // }) => {
-  //   const isSelectedDay = date.date?.dateString === currentDate;
-  //   return <DateComponent 
-  //   key={date.date?.dateString}
-  //     state={date.state}
-  //     dateTime={date.date as DateData}
-  //     onDayPress={onDayPress} 
-  //     isSelected={isSelectedDay} 
-  //   />;
-  // }, [currentDate, onDayPress]);
-
   const onMonthChange = useCallback((month: DateData) => {
     setCurrentMonth({
       month: month.month,
       year: month.year
     });
+  }, []);
+
+  const onTodayPress = useCallback(() => {
+    setCurrentDate({
+      year: dayjs().year(),
+      month: dayjs().month() + 1,
+      day: dayjs().date(),
+      dateString: dayjs().format('YYYY-MM-DD'),
+      timestamp: dayjs().unix()
+    });
+
+    setCurrentMonth({
+      month: dayjs().month() + 1,
+      year: dayjs().year()
+    })
+    console.log("Clicked on today");
+    
   }, []);
 
   const calendarTheme = useMemo(() => {
@@ -83,8 +85,13 @@ const App = () => {
   return (
     <>
       <View style={styles.container}>
-        <CalendarHeader currentMonth={currentMonth.month} currentYear={currentMonth.year} />
+        <CalendarHeader 
+          currentMonth={currentMonth.month} 
+          currentYear={currentMonth.year} 
+          onTodayPress={onTodayPress}
+        />
         <Calendar
+          initialDate={`${currentMonth.year}-${currentMonth.month}-01` }
           style={styles.calendar}
           theme={calendarTheme}
           hideArrows
