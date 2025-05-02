@@ -1,0 +1,16 @@
+diff --git a/node_modules/react-native-calendars/src/componentUpdater.js b/node_modules/react-native-calendars/src/componentUpdater.js
+index 40cf526..437a3fc 100644
+--- a/node_modules/react-native-calendars/src/componentUpdater.js
++++ b/node_modules/react-native-calendars/src/componentUpdater.js
+@@ -36,9 +36,10 @@ export function extractDotProps(props) {
+     return dotProps;
+ }
+ export function extractDayProps(props) {
+-    const { state, marking, markingType, theme, onPress, onLongPress, date, disableAllTouchEventsForDisabledDays, disableAllTouchEventsForInactiveDays, dayComponent, testID } = props;
++    const { state, current, marking, markingType, theme, onPress, onLongPress, date, disableAllTouchEventsForDisabledDays, disableAllTouchEventsForInactiveDays, dayComponent, testID } = props;
+     const dayProps = {
+         state,
++        current, 
+         marking,
+         markingType,
+         theme,
